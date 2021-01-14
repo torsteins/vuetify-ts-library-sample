@@ -1,4 +1,27 @@
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
+import Vue from 'vue';
+import Vuetify from 'vuetify';
+import { Component, Prop, Vue as Vue$1, Watch } from 'vue-property-decorator';
+
+Vue.use(Vuetify);
+const options = {
+  theme: {
+    options: {
+      customProperties: true
+    },
+    themes: {
+      light: {
+        primary: '#ee44aa',
+        secondary: '#424242',
+        accent: '#82B1FF',
+        error: '#FF5252',
+        info: '#2196F3',
+        success: '#4CAF50',
+        warning: '#FFC107'
+      }
+    }
+  }
+};
+new Vuetify(options);
 
 function _initializerDefineProperty(target, property, descriptor, context) {
   if (!descriptor) return;
@@ -45,7 +68,7 @@ let Ping = (_dec = Component({
   components: {}
 }), _dec2 = Prop({
   default: "poof"
-}), _dec(_class = (_class2 = (_temp = class Ping extends Vue {
+}), _dec(_class = (_class2 = (_temp = class Ping extends Vue$1 {
   constructor(...args) {
     super(...args);
 
@@ -188,7 +211,7 @@ let TestComp = (_dec$1 = Component({
   default: () => []
 }), _dec6 = Watch('items', {
   deep: true
-}), _dec$1(_class$1 = (_class2$1 = (_temp$1 = class TestComp extends Vue {
+}), _dec$1(_class$1 = (_class2$1 = (_temp$1 = class TestComp extends Vue$1 {
   constructor(...args) {
     super(...args);
 
@@ -237,6 +260,59 @@ let TestComp = (_dec$1 = Component({
   initializer: null
 }), _applyDecoratedDescriptor(_class2$1.prototype, "loadLocalStringList", [_dec6], Object.getOwnPropertyDescriptor(_class2$1.prototype, "loadLocalStringList"), _class2$1.prototype)), _class2$1)) || _class$1);
 
+const isOldIE = typeof navigator !== 'undefined' &&
+    /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+function createInjector(context) {
+    return (id, style) => addStyle(id, style);
+}
+let HEAD;
+const styles = {};
+function addStyle(id, css) {
+    const group = isOldIE ? css.media || 'default' : id;
+    const style = styles[group] || (styles[group] = { ids: new Set(), styles: [] });
+    if (!style.ids.has(id)) {
+        style.ids.add(id);
+        let code = css.source;
+        if (css.map) {
+            // https://developer.chrome.com/devtools/docs/javascript-debugging
+            // this makes source maps inside style tags work properly in Chrome
+            code += '\n/*# sourceURL=' + css.map.sources[0] + ' */';
+            // http://stackoverflow.com/a/26603875
+            code +=
+                '\n/*# sourceMappingURL=data:application/json;base64,' +
+                    btoa(unescape(encodeURIComponent(JSON.stringify(css.map)))) +
+                    ' */';
+        }
+        if (!style.element) {
+            style.element = document.createElement('style');
+            style.element.type = 'text/css';
+            if (css.media)
+                style.element.setAttribute('media', css.media);
+            if (HEAD === undefined) {
+                HEAD = document.head || document.getElementsByTagName('head')[0];
+            }
+            HEAD.appendChild(style.element);
+        }
+        if ('styleSheet' in style.element) {
+            style.styles.push(code);
+            style.element.styleSheet.cssText = style.styles
+                .filter(Boolean)
+                .join('\n');
+        }
+        else {
+            const index = style.ids.size - 1;
+            const textNode = document.createTextNode(code);
+            const nodes = style.element.childNodes;
+            if (nodes[index])
+                style.element.removeChild(nodes[index]);
+            if (nodes.length)
+                style.element.insertBefore(textNode, nodes[index]);
+            else
+                style.element.appendChild(textNode);
+        }
+    }
+}
+
 /* script */
 const __vue_script__$1 = TestComp;
 /* template */
@@ -248,7 +324,9 @@ var __vue_render__$1 = function () {
 
   var _c = _vm._self._c || _h;
 
-  return _c('div', [_c('v-card', {
+  return _c('div', {
+    staticClass: "testcomp"
+  }, [_c('v-card', {
     attrs: {
       "elevation": "10",
       "outlined": "",
@@ -288,18 +366,24 @@ var __vue_render__$1 = function () {
 var __vue_staticRenderFns__$1 = [];
 /* style */
 
-const __vue_inject_styles__$1 = undefined;
+const __vue_inject_styles__$1 = function (inject) {
+  if (!inject) return;
+  inject("data-v-53b1d7cc_0", {
+    source: ".testcomp[data-v-53b1d7cc]{background-color:pink}",
+    map: undefined,
+    media: undefined
+  });
+};
 /* scoped */
 
-const __vue_scope_id__$1 = "data-v-db3b7cc0";
+
+const __vue_scope_id__$1 = "data-v-53b1d7cc";
 /* module identifier */
 
 const __vue_module_identifier__$1 = undefined;
 /* functional template */
 
 const __vue_is_functional_template__$1 = false;
-/* style inject */
-
 /* style inject SSR */
 
 /* style inject shadow dom */
@@ -307,7 +391,7 @@ const __vue_is_functional_template__$1 = false;
 const __vue_component__$1 = /*#__PURE__*/normalizeComponent({
   render: __vue_render__$1,
   staticRenderFns: __vue_staticRenderFns__$1
-}, __vue_inject_styles__$1, __vue_script__$1, __vue_scope_id__$1, __vue_is_functional_template__$1, __vue_module_identifier__$1, false, undefined, undefined, undefined);
+}, __vue_inject_styles__$1, __vue_script__$1, __vue_scope_id__$1, __vue_is_functional_template__$1, __vue_module_identifier__$1, false, createInjector, undefined, undefined);
 
 /* eslint-disable import/prefer-default-export */
 
@@ -316,7 +400,6 @@ var components = /*#__PURE__*/Object.freeze({
   TestComp: __vue_component__$1
 });
 
-// Import vue components
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
 // install function executed by Vue.use()

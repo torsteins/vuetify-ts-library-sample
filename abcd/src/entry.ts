@@ -1,4 +1,5 @@
 import _Vue, { PluginFunction } from 'vue';
+import "@/plugins/vuetify";
 
 // Import vue components
 import * as components from '@/lib-components/index';

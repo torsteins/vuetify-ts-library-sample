@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="testcomp">
         <v-card
             elevation="10"
             outlined
@@ -73,5 +73,9 @@ export default class TestComp extends Vue {
 </script>
 
 <style lang="scss" scoped>
+
+.testcomp {
+    background-color: pink;
+}
 
 </style>

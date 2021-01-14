@@ -1,4 +1,4 @@
-'use strict';Object.defineProperty(exports,'__esModule',{value:true});var vuePropertyDecorator=require('vue-property-decorator');function _classCallCheck(instance, Constructor) {
+'use strict';Object.defineProperty(exports,'__esModule',{value:true});var Vue=require('vue'),Vuetify=require('vuetify'),vuePropertyDecorator=require('vue-property-decorator');function _interopDefaultLegacy(e){return e&&typeof e==='object'&&'default'in e?e:{'default':e}}var Vue__default=/*#__PURE__*/_interopDefaultLegacy(Vue);var Vuetify__default=/*#__PURE__*/_interopDefaultLegacy(Vuetify);function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
   }
@@ -192,7 +192,26 @@ function _applyDecoratedDescriptor(target, property, decorators, descriptor, con
   }
 
   return desc;
-}var _dec, _dec2, _class, _class2, _descriptor, _temp;
+}Vue__default['default'].use(Vuetify__default['default']);
+var options = {
+  theme: {
+    options: {
+      customProperties: true
+    },
+    themes: {
+      light: {
+        primary: '#ee44aa',
+        secondary: '#424242',
+        accent: '#82B1FF',
+        error: '#FF5252',
+        info: '#2196F3',
+        success: '#4CAF50',
+        warning: '#FFC107'
+      }
+    }
+  }
+};
+new Vuetify__default['default'](options);var _dec, _dec2, _class, _class2, _descriptor, _temp;
 var Ping = (_dec = vuePropertyDecorator.Component({
   name: "Ping",
   components: {}
@@ -417,7 +436,47 @@ var TestComp = (_dec$1 = vuePropertyDecorator.Component({
   enumerable: true,
   writable: true,
   initializer: null
-}), _applyDecoratedDescriptor(_class2$1.prototype, "loadLocalStringList", [_dec6], Object.getOwnPropertyDescriptor(_class2$1.prototype, "loadLocalStringList"), _class2$1.prototype)), _class2$1)) || _class$1);/* script */
+}), _applyDecoratedDescriptor(_class2$1.prototype, "loadLocalStringList", [_dec6], Object.getOwnPropertyDescriptor(_class2$1.prototype, "loadLocalStringList"), _class2$1.prototype)), _class2$1)) || _class$1);function createInjectorSSR(context) {
+    if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
+        context = __VUE_SSR_CONTEXT__;
+    }
+    if (!context)
+        return () => { };
+    if (!('styles' in context)) {
+        context._styles = context._styles || {};
+        Object.defineProperty(context, 'styles', {
+            enumerable: true,
+            get: () => context._renderStyles(context._styles)
+        });
+        context._renderStyles = context._renderStyles || renderStyles;
+    }
+    return (id, style) => addStyle(id, style, context);
+}
+function addStyle(id, css, context) {
+    const group =  css.media || 'default' ;
+    const style = context._styles[group] || (context._styles[group] = { ids: [], css: '' });
+    if (!style.ids.includes(id)) {
+        style.media = css.media;
+        style.ids.push(id);
+        let code = css.source;
+        style.css += code + '\n';
+    }
+}
+function renderStyles(styles) {
+    let css = '';
+    for (const key in styles) {
+        const style = styles[key];
+        css +=
+            '<style data-vue-ssr-id="' +
+                Array.from(style.ids).join(' ') +
+                '"' +
+                (style.media ? ' media="' + style.media + '"' : '') +
+                '>' +
+                style.css +
+                '</style>';
+    }
+    return css;
+}/* script */
 var __vue_script__$1 = TestComp;
 /* template */
 
@@ -428,7 +487,9 @@ var __vue_render__$1 = function __vue_render__() {
 
   var _c = _vm._self._c || _h;
 
-  return _c('div', [_c('v-card', {
+  return _c('div', {
+    staticClass: "testcomp"
+  }, [_c('v-card', {
     attrs: {
       "elevation": "10",
       "outlined": "",
@@ -468,26 +529,30 @@ var __vue_render__$1 = function __vue_render__() {
 var __vue_staticRenderFns__$1 = [];
 /* style */
 
-var __vue_inject_styles__$1 = undefined;
+var __vue_inject_styles__$1 = function __vue_inject_styles__(inject) {
+  if (!inject) return;
+  inject("data-v-53b1d7cc_0", {
+    source: ".testcomp[data-v-53b1d7cc]{background-color:pink}",
+    map: undefined,
+    media: undefined
+  });
+};
 /* scoped */
 
-var __vue_scope_id__$1 = "data-v-db3b7cc0";
+
+var __vue_scope_id__$1 = "data-v-53b1d7cc";
 /* module identifier */
 
-var __vue_module_identifier__$1 = "data-v-db3b7cc0";
+var __vue_module_identifier__$1 = "data-v-53b1d7cc";
 /* functional template */
 
 var __vue_is_functional_template__$1 = false;
-/* style inject */
-
-/* style inject SSR */
-
 /* style inject shadow dom */
 
 var __vue_component__$1 = /*#__PURE__*/normalizeComponent({
   render: __vue_render__$1,
   staticRenderFns: __vue_staticRenderFns__$1
-}, __vue_inject_styles__$1, __vue_script__$1, __vue_scope_id__$1, __vue_is_functional_template__$1, __vue_module_identifier__$1, false, undefined, undefined, undefined);/* eslint-disable import/prefer-default-export */var components=/*#__PURE__*/Object.freeze({__proto__:null,TestComp: __vue_component__$1});// eslint-disable-next-line @typescript-eslint/no-explicit-any
+}, __vue_inject_styles__$1, __vue_script__$1, __vue_scope_id__$1, __vue_is_functional_template__$1, __vue_module_identifier__$1, false, undefined, createInjectorSSR, undefined);/* eslint-disable import/prefer-default-export */var components=/*#__PURE__*/Object.freeze({__proto__:null,TestComp: __vue_component__$1});// eslint-disable-next-line @typescript-eslint/no-explicit-any
 
 // install function executed by Vue.use()
 var install = function installAbcd(Vue) {
