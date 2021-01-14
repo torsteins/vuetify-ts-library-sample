@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@mdi/font": "^3.6.95",
-    "abcd": "file:../abcd",
+    "abcd": "file:../abcd/abcd-1.0.0.tgz",
     "core-js": "^3.6.5",
     "roboto-fontface": "*",
     "vue": "^2.6.11",

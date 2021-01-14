@@ -1,5 +1,5 @@
 <template>
-    <div class="testcomp">
+    <div class="testcomptwo">
         <v-card
             elevation="10"
             outlined
@@ -12,7 +12,6 @@
                     </div>
                     <v-list-item-title class="headline mb-1">
                         {{ headline }}
-                        <ping :poof="'poof: ' + headline"/>
                     </v-list-item-title>
                     <v-list-item-subtitle>{{ subtitle }}</v-list-item-subtitle>
                     <v-list-item v-for="line in localStringList" :key="line">
@@ -44,19 +43,18 @@
 <script lang="ts">
 
 import {Vue, Component, Prop, Watch} from "vue-property-decorator";
-import Ping from "@/components/Ping.vue";
 
 @Component({
-    name: "TestComp",
-    components: {Ping}
+    name: "TestCompTwo",
+    components: {}
 })
-export default class TestComp extends Vue {
-    @Prop({default: "OVERLINE"}) overline !: String;
-    @Prop({default: "Headline"}) headline !: String;
-    @Prop({default: "Subtitle"}) subtitle !: String;
-    @Prop({default: () => []}) items !: String[];
+export default class TestCompTwo extends Vue {
+    @Prop({default: "OVERLINE"}) overline !: string;
+    @Prop({default: "Headline"}) headline !: string;
+    @Prop({default: "Subtitle"}) subtitle !: string;
+    @Prop({default: () => []}) items !: string[];
 
-    localStringList : String[] = [];
+    localStringList: string[] = [];
 
     @Watch('items', {deep: true})
     loadLocalStringList() {
@@ -75,8 +73,8 @@ export default class TestComp extends Vue {
 
 <style lang="scss" scoped>
 
-.testcomp {
-    background-color: pink;
+.testcomptwo {
+    background-color: violet;
 }
 
 </style>
