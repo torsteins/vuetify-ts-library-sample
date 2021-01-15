@@ -1,5 +1,5 @@
 import { Vue } from 'vue-property-decorator';
-import Vuetify from 'vuetify';
+import Vuetify from 'vuetify/lib';
 
 Vue.use(Vuetify);
 

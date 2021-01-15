@@ -1,20 +1,13 @@
 // rollup.config.js
-import fs from 'fs';
 import path from 'path';
 import vue from 'rollup-plugin-vue';
 import alias from '@rollup/plugin-alias';
 import resolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
 import babel from '@rollup/plugin-babel';
-import minimist from 'minimist';
-
-// Get browserslist config and remove ie from es build targets
-const esbrowserslist = fs.readFileSync('./.browserslistrc')
-  .toString()
-  .split('\n')
-  .filter((entry) => entry && entry.substring(0, 2) !== 'ie');
-
-const argv = minimist(process.argv.slice(2));
+// import typescript from '@rollup/plugin-typescript';
+// import typescript2 from 'rollup-plugin-typescript2';
+// import vuetify from 'rollup-plugin-vuetify';
 
 const projectRoot = path.resolve(__dirname, '..');
 const extensions = ['.js', '.jsx', '.ts', '.tsx', '.vue'];
@@ -26,7 +19,8 @@ const esConfig = {
   external: [
     'vue',
     'vue-property-decorator',
-    'vuetify'
+    'vuetify/lib',
+    /@babel\/runtime/
   ],
   output: {
     file: 'dist/abcd.esm.js',
@@ -44,13 +38,19 @@ const esConfig = {
         '@': path.resolve(projectRoot, 'src'),
       },
     }),
+    // nodeResolve(),
     vue({
       css: true,
       template: {
         isProduction: true,
       },
     }),
+    // typescript2({
+    //   tsconfig: resolve(projectRoot, 'tsconfig.json')
+    // }),
+    // vuetify({}),
     babel({
+      babelHelpers: 'runtime',
       exclude: 'node_modules/**',
       extensions,
       presets: [
@@ -67,6 +67,13 @@ const esConfig = {
       plugins: [
         ["@babel/plugin-proposal-decorators", { "legacy": true }],
         ["@babel/plugin-proposal-class-properties", { "loose": true}],
+        ["@babel/plugin-transform-runtime", {
+          "absoluteRuntime": false,
+          "corejs": false,
+          "helpers": true,
+          "regenerator": true,
+          "useESModules": false,
+        }]
       ]
     }),
   ],
